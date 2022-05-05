@@ -2,7 +2,7 @@ const debug = require('debug')('app:notifications:queue-service');
 const amqp = require('amqplib');
 const { config } = require('../configs/queue.config');
 
-async function sendNotification(message) {
+async function readNotifications() {
     const url = config.URL;
     const queue = config.QNAME;
     try {
@@ -11,16 +11,21 @@ async function sendNotification(message) {
         let connection = await amqp.connect(url);
         let channel = await connection.createChannel();
         await channel.assertQueue(queue, {
-            durable: false
+            durable: true
         });
 
-        let msg = {
-            type: 'NOTIFICATION',
-            payload: message
-        }
+        console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", queue);
 
         await channel.sendToQueue(queue, Buffer.from(JSON.stringify(message)));
         debug('[x] Sent %s', message);
+
+        await channel.consume(queue, function (msg) {
+            let message = JSON.parse(msg.content)
+            console.log(" [x] Received %s", JSON.stringify(message));
+        }, {
+            noAck: true,
+        });
+
         await channel.close();
         await connection.close();
     } catch (error) {
@@ -28,4 +33,4 @@ async function sendNotification(message) {
     }
 }
 
-module.exports = { sendNotification }
+module.exports = { readNotifications }

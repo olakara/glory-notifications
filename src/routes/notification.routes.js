@@ -11,17 +11,4 @@ router.get('/', async (req, res) => {
     res.json(vm);
 });
 
-// store new notification
-router.post('/', async (req, res) => {
-
-    const notificationDto = {
-        message: req.body.message,
-        createDate: req.body.createDate,
-    };
-
-    res.json(await createService.storeNotification(notificationDto));
-});
-
-
-
 module.exports = router;
