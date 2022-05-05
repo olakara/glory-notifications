@@ -1,0 +1,21 @@
+version: '3'
+services:
+  notification:
+    container_name: notification-service
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    image: olakara/notification-service
+    ports:
+      - "5050:80"
+    depends_on:
+      - notification-db
+      - rabbitmq
+  notification-db:
+    container_name: notification-db
+    image: mongo
+    restart: always
+    volumes:
+      - ../mongo-volume-notifications:/data/db
+    ports:
+      - "27018:27017"
