@@ -13,14 +13,17 @@ const app = express();
 app.use(morgan('short'));
 app.use(express.json());
 
-// App status
-app.get('/', (req, res) => {
-    res.send('ok')
-});
+let channel = null;
+let connection = null;
+const queue = 'notifications';
+
+
+processQueue();
 
 async function processQueue() {
 
     try {
+
         console.log('calling readNotifications');
         await readNotifications();
     } catch (error) {
@@ -28,10 +31,14 @@ async function processQueue() {
     }
 }
 
+// App status
+app.get('/', (req, res) => {
+    res.send('ok - new')
+});
 // App Routes
 app.use('/notifications', notificationRoutes);
 
-processQueue();
+
 
 app.listen(PORT, HOST, () => {
     debug('Listening on port: ' + chalk.green(PORT));
