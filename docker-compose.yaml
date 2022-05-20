@@ -5,9 +5,9 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./
-    image: olakara/notification-service
+    image: olakara/notifications
     ports:
-      - "5050:80"
+      - "5000:80"
     depends_on:
       - notification-db
       - rabbitmq
@@ -19,3 +19,12 @@ services:
       - ../mongo-volume-notifications:/data/db
     ports:
       - "27018:27017"
+  rabbitmq:
+    container_name: my-rabbit
+    image: rabbitmq:3-management
+    ports:
+      - "8080:15672"
+      - "5672:5672"
+    volumes:
+      - ../rabbitmq-volume/data:/var/lib/rabbitmq/
+      - ../rabbitmq-volume/log:/var/log/rabbitmq/

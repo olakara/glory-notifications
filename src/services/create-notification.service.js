@@ -4,6 +4,7 @@ const { getDbContext } = require('../shared/db.service');
 
 async function storeNotification(notificationDto) {
 
+    console.log('Create notification called!');
     const [db, client] = await getDbContext();
 
     try {

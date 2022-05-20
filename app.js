@@ -33,10 +33,10 @@ async function processQueue() {
 
         console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", queue);
 
-        await channel.consume(queue, function (msg) {
+        await channel.consume(queue, async function (msg) {
             let message = JSON.parse(msg.content)
             console.log(" [x] Received %s", JSON.stringify(message));
-            notificationService.storeNotification(message);
+            await notificationService.storeNotification(message);
         }, {
             noAck: true,
         });

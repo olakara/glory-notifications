@@ -5,6 +5,7 @@ const { config } = require('../configs/db.config');
 
 async function getDbContext() {
 
+    console.log('Inside the getDbContext method')
     const url = config.URL;
     const dbName = config.DBNAME;
 
