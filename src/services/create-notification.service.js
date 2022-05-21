@@ -4,7 +4,6 @@ const { getDbContext } = require('../shared/db.service');
 
 async function storeNotification(notificationDto) {
 
-    console.log('Create notification called!');
     const [db, client] = await getDbContext();
 
     try {
@@ -14,6 +13,8 @@ async function storeNotification(notificationDto) {
             status: 'UNREAD',
             isDeleted: false
         };
+
+        console.log(JSON.stringify(notificationDm));
 
         const response = await db.collection('notifications').insertOne(notificationDm);
         return response;

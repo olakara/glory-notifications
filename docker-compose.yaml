@@ -1,7 +1,7 @@
 version: '3'
 services:
   notification:
-    container_name: notification-service
+    container_name: notifications
     build:
       dockerfile: Dockerfile
       context: ./
@@ -15,10 +15,11 @@ services:
     container_name: notification-db
     image: mongo
     restart: always
+    command: mongod --port 27072
     volumes:
       - ../mongo-volume-notifications:/data/db
     ports:
-      - "27018:27017"
+      - "27072:27072"
   rabbitmq:
     container_name: my-rabbit
     image: rabbitmq:3-management
